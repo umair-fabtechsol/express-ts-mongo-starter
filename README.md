@@ -52,8 +52,8 @@ npm init nodejs-ts-app <project-name>
 Clone the repo:
 
 ```bash
-git clone --depth 1 https://github.com/saisilinus/node-express-mongoose-typescript-boilerplate.git
-cd node-express-mongoose-typescript-boilerplate
+git clone --depth 1 https://github.com/umair-fabtechsol/express-ts-mongo-starter.git
+cd express-ts-mongo-starter
 ```
 
 Install the dependencies:
