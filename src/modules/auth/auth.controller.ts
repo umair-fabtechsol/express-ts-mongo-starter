@@ -5,6 +5,7 @@ import { tokenService } from '../token/index.js';
 import { userService } from '../user/index.js';
 import * as authService from './auth.service.js';
 import { emailService } from '../email/index.js';
+import { IUserDoc } from '../user/user.interfaces.js';
 
 export const register = catchAsync(async (req: Request, res: Response) => {
   const user = await userService.registerUser(req.body);
@@ -41,9 +42,13 @@ export const resetPassword = catchAsync(async (req: Request, res: Response) => {
 });
 
 export const sendVerificationEmail = catchAsync(async (req: Request, res: Response) => {
-  const verifyEmailToken = await tokenService.generateVerifyEmailToken(req.user);
-  await emailService.sendVerificationEmail(req.user.email, verifyEmailToken, req.user.name);
-  res.status(httpStatus.NO_CONTENT).send();
+  if (!req.user) {
+    return res.status(httpStatus.UNAUTHORIZED).send({ message: 'User not authenticated' });
+  }
+  const user = req.user as IUserDoc;
+  const verifyEmailToken = await tokenService.generateVerifyEmailToken(user);
+  await emailService.sendVerificationEmail(user.email, verifyEmailToken, user.name);
+  return res.status(httpStatus.NO_CONTENT).send();
 });
 
 export const verifyEmail = catchAsync(async (req: Request, res: Response) => {

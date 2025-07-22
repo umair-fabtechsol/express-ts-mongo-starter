@@ -1,12 +1,8 @@
 import winston from 'winston';
 import config from '../../config/config.js';
 
-interface LoggingInfo {
-  level: string;
-  message: string;
-}
 
-const enumerateErrorFormat = winston.format((info: LoggingInfo) => {
+const enumerateErrorFormat = winston.format((info) => {
   if (info instanceof Error) {
     Object.assign(info, { message: info.stack });
   }
@@ -19,7 +15,7 @@ const logger = winston.createLogger({
     enumerateErrorFormat(),
     config.env === 'development' ? winston.format.colorize() : winston.format.uncolorize(),
     winston.format.splat(),
-    winston.format.printf((info: LoggingInfo) => `${info.level}: ${info.message}`)
+    winston.format.printf((info: winston.Logform.TransformableInfo) => `${info.level}: ${info.message}`)
   ),
   transports: [
     new winston.transports.Console({
